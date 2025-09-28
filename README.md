@@ -1,118 +1,55 @@
-# 🛡️ Censys Host Summarizer
+# Censys Host Summarizer
 
-A modern web application for AI-powered network host security analysis using real Censys data. Automatically switches between mock analysis (no API key) and real AI analysis (with OpenAI key).
+An AI-powered web application that analyzes network host data from Censys and generates security summaries using advanced prompt engineering techniques.
 
-## ✨ Features
+## Features
 
-- **🤖 Dual Mode**: Mock analysis (rule-based) or real AI analysis (OpenAI GPT)
-- **📊 Real Data**: Processes actual Censys host data with services and vulnerabilities  
-- **🎨 Modern UI**: Colorful interface with gradients, animations, and responsive design
-- **📁 Flexible Input**: Upload JSON files or use sample data
-- **📋 Detailed Reports**: Security risks, key services, and actionable recommendations
-- **📄 Export**: Copy analysis results as JSON
+- **AI-Powered Analysis**: Uses OpenAI GPT with sophisticated prompt engineering
+- **Real Data Processing**: Handles actual Censys host data with services and vulnerabilities
+- **Modern UI**: Clean, colorful interface for uploading data and viewing results
+- **Intelligent Fallback**: Works with or without API key (mock mode for testing)
 
-## 🏗️ Architecture
-
-```
-censys-summarizer/
-├── .gitignore              # Single root gitignore
-├── README.md               # This file
-├── backend/
-│   ├── .env.example       # Backend environment template
-│   ├── requirements.txt   # Python dependencies  
-│   └── app.py            # FastAPI server (single file)
-├── frontend/
-│   ├── .env.example       # Frontend environment template
-│   ├── package.json       # Node.js dependencies
-│   └── src/               # React application
-└── data/
-    └── hosts_dataset.json  # Sample Censys data
-```
-
-## 🚀 Quick Start
+## Quick Start
 
 ### Prerequisites
-- Python 3.8+ with pip
-- Node.js 16+ with npm
+- Python 3.8+ and Node.js 16+
+- OpenAI API key (optional - works in demo mode without)
 
-### 1. Backend Setup
+### Backend Setup
 ```bash
 cd backend
-
-# Create virtual environment
 python3 -m venv .venv
 source .venv/bin/activate  # Windows: .venv\Scripts\activate
-
-# Install dependencies
 pip install -r requirements.txt
-
-# Create environment file
 cp .env.example .env
-
-# Start server
+# Optional: Edit .env and add OPENAI_API_KEY=your-key-here
 python app.py
 ```
 
-**You'll see:**
-```bash
-🧪 MOCK MODE: Using rule-based analysis (no API key)
-🌐 Server: http://localhost:8000
-```
-
-### 2. Frontend Setup
+### Frontend Setup
 ```bash
 cd frontend
-
-# Install dependencies
 npm install
-
-# Create environment file  
 cp .env.example .env
-
-# Start development server
 npm run dev
 ```
 
-**Visit:** http://localhost:5173
+### Access
+- **Frontend**: http://localhost:5173
+- **Backend API**: http://localhost:8000
+- **API Docs**: http://localhost:8000/docs
 
-## 🔑 Environment Configuration
+## Usage
 
-### Backend `.env` (Auto-created from template)
-```bash
-# Default: Mock mode (no API key needed)
-OPENAI_API_KEY=your_openai_api_key_here
-MODEL=gpt-4o-mini
-```
-
-### Frontend `.env` (Auto-created from template)
-```bash
-# Points to local backend
-VITE_BACKEND_URL=http://localhost:8000
-```
-
-## 🤖 Switching to AI Mode
-
-**To enable real AI analysis:**
-
-1. Get OpenAI API key from https://platform.openai.com/
-2. Edit `backend/.env`:
-   ```bash
-   OPENAI_API_KEY=sk-your-real-key-here
-   ```
-3. Restart backend: `python app.py`
-4. You'll see: `🤖 AI MODE: Using OpenAI gpt-4o-mini for real analysis`
-
-## 📖 Usage Guide
-
-1. **Load Data**: Click "Load sample" or "Upload JSON"
-2. **Select Hosts**: Use checkboxes to choose hosts for analysis  
-3. **Analyze**: Click "Summarize X Hosts" button
-4. **Review**: View color-coded security analysis cards
+1. **Load Data**: Click "Load sample" or upload your own JSON file
+2. **Select Hosts**: Choose hosts to analyze using checkboxes
+3. **Analyze**: Click "Summarize X Hosts" to get AI-powered security analysis
+4. **Review Results**: View detailed security cards with risks and recommendations
 5. **Export**: Click JSON icon to copy analysis data
 
-## 📊 Data Format
+## Data Format
 
-Supports Censys host data format:
+Supports Censys host data:
 ```json
 {
   "hosts": [
@@ -122,7 +59,7 @@ Supports Censys host data format:
         {
           "port": 22,
           "protocol": "SSH",
-          "banner": "SSH-2.0-OpenSSH_8.7", 
+          "banner": "SSH-2.0-OpenSSH_8.7",
           "software": [{"product": "OpenSSH", "version": "8.7"}],
           "vulnerabilities": [{"cve": "CVE-2021-41617"}]
         }
@@ -132,93 +69,87 @@ Supports Censys host data format:
 }
 ```
 
-## 🎯 How It Works
+## AI Techniques
 
-### Mock Mode (Default - No API Key)
-- **Analysis**: Rule-based pattern matching
-- **Risks**: Detected from ports and services (SSH, FTP, HTTP, databases)
-- **Recommendations**: Template-based security advice
-- **Speed**: Instant results with simulated delay
-- **Cost**: Free
+The application demonstrates advanced prompt engineering:
 
-### AI Mode (With OpenAI Key)  
-- **Analysis**: Real OpenAI GPT reasoning
-- **Risks**: AI-identified based on actual configuration
-- **Recommendations**: Custom advice per host
-- **Speed**: 2-5 seconds per host
-- **Cost**: OpenAI API usage
+- **Multi-Stage Prompting**: System role + few-shot examples + specific instructions
+- **Few-Shot Learning**: Curated cybersecurity analysis examples for consistent quality
+- **Chain-of-Thought**: 5-step reasoning process (Identify → Research → Assess → Prioritize → Recommend)
+- **Dynamic Adaptation**: Prompts adjust based on host complexity and service count
+- **Temperature Optimization**: Low temperature (0.1) for factual, consistent analysis
 
-## 🛠️ Technology Stack
+All prompt engineering code is in `backend/prompts.py` for easy evaluation.
 
-**Backend:**
-- FastAPI (Python web framework)
-- OpenAI API (GPT analysis)
-- Pydantic (data validation)
-- python-dotenv (environment management)
+## Architecture
 
-**Frontend:**
-- React 19 (UI framework)
-- Vite (build tool)
-- Custom CSS (no framework dependencies)
-
-## 🔒 Security & Git
-
-### What's Tracked:
-- ✅ Source code and templates
-- ✅ Dependencies (`requirements.txt`, `package.json`)
-- ✅ Environment templates (`.env.example`)
-- ✅ Documentation
-
-### What's Ignored:
-- 🔒 Environment files with secrets (`.env`)
-- 📦 Dependencies (`node_modules/`, `.venv/`)
-- 🏗️ Build artifacts (`dist/`, `__pycache__/`)
-- 💻 Editor files (`.vscode/`, `.idea/`)
-
-### Environment Strategy:
-1. **Templates committed** (`.env.example`) - Safe, no secrets
-2. **Actual files ignored** (`.env`) - May contain API keys
-3. **Team onboarding** - Copy template to get started
-4. **No accidental commits** - Real secrets auto-ignored
-
-## 🚨 Important Notes
-
-- **API Keys**: Never commit real keys - use templates only
-- **Virtual Environment**: Always activate `.venv` before running Python
-- **Both Servers**: Backend and frontend must both run
-- **Port 8000**: Backend runs on 8000, frontend on 5173
-- **Mock Mode**: Works without any API keys for testing
-
-## 🐛 Troubleshooting
-
-**Backend won't start:**
-```bash
-# Check Python version
-python --version  # Should be 3.8+
-
-# Activate virtual environment
-source .venv/bin/activate
-
-# Install dependencies
-pip install -r requirements.txt
+```
+censys-summarizer/
+├── backend/
+│   ├── app.py              # Main FastAPI application
+│   ├── prompts.py          # AI prompt engineering (showcase)
+│   └── requirements.txt    # Python dependencies
+├── frontend/
+│   ├── src/                # React application
+│   └── package.json        # Node.js dependencies
+└── data/
+    └── hosts_dataset.json  # Sample Censys data
 ```
 
-**Frontend won't start:**
-```bash
-# Check Node version  
-node --version  # Should be 16+
+## Technology Stack
 
-# Clear cache and reinstall
-rm -rf node_modules package-lock.json
-npm install
+**Backend**: FastAPI, OpenAI API, Pydantic
+**Frontend**: React 19, Vite, Custom CSS
+**AI**: Advanced prompt engineering with GPT-4o-mini
+
+## Testing
+
+### Manual Testing
+```bash
+# 1. Start both servers (see Quick Start)
+# 2. Test basic functionality:
+curl http://localhost:8000/health  # Should return {"ok": true, "mode": "AI"}
+
+# 3. Test analysis:
+curl -X POST http://localhost:8000/summarize \
+  -H "Content-Type: application/json" \
+  -d '{"hosts":[{"ip":"test","services":[{"port":22,"protocol":"SSH"}]}]}'
+
+# 4. Frontend testing:
+# - Visit http://localhost:5173
+# - Click "Load sample" → should load 3 hosts
+# - Select hosts and click "Summarize" → should show analysis cards
 ```
 
-**Analysis not working:**
-- Check both servers are running
-- Verify backend URL in frontend `.env`
-- Check browser console for errors
-- Ensure `.env` files exist (copy from `.env.example`)
+### Expected Results
+- **AI Mode**: Unique analysis per host with specific recommendations
+- **Mock Mode**: Realistic rule-based analysis for demonstration
+- **Error Handling**: Clear error messages for invalid data or connection issues
 
-## 📄 License
+## Development Assumptions
 
-This project is for educational and demonstration purposes.
+**Technical**: 
+- OpenAI API available when key provided
+- Modern browser with ES6+ support
+- Local development environment
+
+**Data**: 
+- JSON input with host/IP identification
+- Censys format preferred but handles simple formats
+- Service/port information when available
+
+**Operational**: 
+- Single-user demo application
+- Local development deployment
+- Manual file upload workflow
+
+## Troubleshooting
+
+**Backend won't start**: Check Python version (3.8+), activate virtual environment
+**Frontend won't start**: Check Node version (16+), run `npm install`
+**"Network error"**: Ensure both servers running, check CORS configuration
+**AI not working**: Verify API key in .env file, check OpenAI account credits
+
+---
+
+For detailed future enhancements and strategic roadmap, see [FUTURE_ENHANCEMENTS.md](./FUTURE_ENHANCEMENTS.md).
