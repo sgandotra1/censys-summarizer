@@ -2,6 +2,8 @@
 
 An AI-powered web application that analyzes network host data from Censys and generates security summaries using advanced prompt engineering techniques.
 
+For detailed future enhancements and strategic roadmap, see [FUTURE_ENHANCEMENTS.md](./FUTURE_ENHANCEMENTS.md).
+
 ## Features
 
 - **AI-Powered Analysis**: Uses OpenAI GPT with sophisticated prompt engineering
@@ -149,7 +151,3 @@ curl -X POST http://localhost:8000/summarize \
 **Frontend won't start**: Check Node version (16+), run `npm install`
 **"Network error"**: Ensure both servers running, check CORS configuration
 **AI not working**: Verify API key in .env file, check OpenAI account credits
-
----
-
-For detailed future enhancements and strategic roadmap, see [FUTURE_ENHANCEMENTS.md](./FUTURE_ENHANCEMENTS.md).
